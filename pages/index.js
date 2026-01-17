@@ -64,6 +64,7 @@ function Home() {
       <div
         className={`text-center z-10 p-8 bg-white bg-opacity-20 backdrop-blur-sm rounded-3xl shadow-2xl transform transition-all duration-1000 ${showMessage ? "scale-100 opacity-100" : "scale-50 opacity-0"}`}
       >
+        <div className="bg-red-500 text-white p-4">Teste</div>
         <div className="mb-6 animate-bounce">
           <Heart
             className="w-20 h-20 mx-auto text-red-500"
