@@ -5,7 +5,7 @@ let animationInterval;
 
 function startAnimation() {
   process.stdout.write("\n ⏳ Waiting on Postgres to accept connections");
-  
+
   animationInterval = setInterval(() => {
     process.stdout.cursorTo(45);
     process.stdout.clearLine(1);
