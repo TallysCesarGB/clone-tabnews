@@ -17,10 +17,9 @@ async function waitForAllServices() {
   }
 }
 
-const orchestrator = {
+const orchestratorObj = {
   waitForAllServices,
 };
 
-export default {
-  orchestrator,
-};
+export default orchestratorObj;
+
