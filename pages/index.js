@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import { Heart } from "lucide-react";
 import { useState, useEffect } from "react";
 
