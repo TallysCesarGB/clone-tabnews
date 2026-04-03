@@ -13,7 +13,7 @@ module.exports = [
       ecmaVersion: 2022,
       sourceType: "module",
       globals: {
-        ...globals.node,      // __dirname, require, module, process, console
+        ...globals.node, // __dirname, require, module, process, console
         ...globals.es2021,
       },
     },
@@ -24,7 +24,7 @@ module.exports = [
     files: ["**/*.test.js", "**/*.spec.js", "test/**/*.js"],
     languageOptions: {
       globals: {
-        ...globals.jest,      // describe, test, expect, beforeAll, etc.
+        ...globals.jest, // describe, test, expect, beforeAll, etc.
         ...globals.node,
       },
     },
@@ -42,12 +42,12 @@ module.exports = [
     languageOptions: {
       parserOptions: {
         ecmaFeatures: {
-          jsx: true,          // habilita JSX
+          jsx: true, // habilita JSX
         },
       },
       globals: {
-        ...globals.browser,   // window, document, fetch (se necessário)
-        ...globals.node,      // para API routes (Next.js backend)
+        ...globals.browser, // window, document, fetch (se necessário)
+        ...globals.node, // para API routes (Next.js backend)
       },
     },
     plugins: {
@@ -68,7 +68,7 @@ module.exports = [
       "node_modules/**",
       ".next/**",
       "coverage/**",
-      "eslint.config.js",    // ignora o próprio arquivo de configuração
+      "eslint.config.js", // ignora o próprio arquivo de configuração
       "commitlint.config.js",
       "jest.config.js",
     ],
