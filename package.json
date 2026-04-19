@@ -19,6 +19,7 @@
     "lint:prettier:check": "prettier --check .",
     "lint:prettier:fix": "prettier --write .",
     "lint:eslint:check": "eslint .",
+    "lint:eslint:fix": "eslint . --fix",
     "prepare": "husky",
     "commit": "cz",
     "scan:staged": "gitleaks-secret-scanner",
