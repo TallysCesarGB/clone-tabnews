@@ -19,6 +19,7 @@
     "lint:prettier:check": "prettier --check .",
     "lint:prettier:fix": "prettier --write .",
     "lint:eslint:check": "eslint .",
+    "lint:eslint:fix": "eslint . --fix",
     "prepare": "husky",
     "commit": "cz",
     "scan:staged": "gitleaks-secret-scanner",
@@ -36,7 +37,8 @@
     "node-pg-migrate": "8.0.4",
     "pg": "8.20.0",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "swr": "^2.4.1"
   },
   "devDependencies": {
     "@commitlint/cli": "20.4.3",
