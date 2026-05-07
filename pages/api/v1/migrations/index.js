@@ -6,18 +6,16 @@ import controller from "infra/controller";
 
 const router = createRouter();
 
-router
-  .get(getHandler)
-  .post(postHandler);
+router.get(getHandler).post(postHandler);
 
 export default router.handler(controller.errorHandlers);
 
 const defaultMigrationsOptions = {
-      dryRun: true,
-      dir: join("infra", "migrations"),
-      direction: "up",
-      verbose: true,
-      migrationsTable: "pgmigrations",
+  dryRun: true,
+  dir: join("infra", "migrations"),
+  direction: "up",
+  verbose: true,
+  migrationsTable: "pgmigrations",
 };
 
 async function getHandler(request, response) {
@@ -31,15 +29,14 @@ async function getHandler(request, response) {
   let dbClient;
   try {
     dbClient = await database.getNewClient();
-  
+
     const pendingMigrations = await migrationRunner({
       ...defaultMigrationsOptions,
-      dbClient
+      dbClient,
     });
     await dbClient.end();
     return response.status(200).json(pendingMigrations);
-  
-  }finally {
+  } finally {
     await dbClient.end();
   }
 }
@@ -55,7 +52,7 @@ async function postHandler(request, response) {
   let dbClient;
   try {
     dbClient = await database.getNewClient();
-    
+
     const migratedMigrations = await migrationRunner({
       ...defaultMigrationsOptions,
       dbClient,
@@ -65,8 +62,7 @@ async function postHandler(request, response) {
     if (migratedMigrations.length > 0)
       return response.status(201).json(migratedMigrations);
     return response.status(200).json(migratedMigrations);
-  
-  }finally {
+  } finally {
     await dbClient.end();
   }
 }

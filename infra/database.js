@@ -11,7 +11,7 @@ async function query(queryObject) {
     const serviceErrorObject = new ServiceError({
       message: "Database query failed",
       cause: err,
-    })
+    });
     throw serviceErrorObject;
   } finally {
     await client?.end();
