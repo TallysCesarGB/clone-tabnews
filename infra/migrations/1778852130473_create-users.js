@@ -28,16 +28,16 @@ export const up = (pgm) => {
     // Using "timestamp with time zone" to ensure that timestamps are stored in UTC and can be easily converted to the user's local time zone when needed.
     // https://justatheory.com/2012/04/postgres-use-timestamptz/
     created_at: {
-      type: "timestamp with time zone",
+      type: "timestamptz",
       notNull: true,
       default: pgm.func("current_timestamp"),
     },
     updated_at: {
-      type: "timestamp with time zone",
+      type: "timestamptz",
       notNull: true,
       default: pgm.func("current_timestamp"),
     },
   });
-}
+};
 
 export const down = false;

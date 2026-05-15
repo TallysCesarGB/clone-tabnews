@@ -16,9 +16,7 @@ const jestConfig = async () => {
   })();
 
   // next/jest sobrescreve transformIgnorePatterns, então modificamos depois
-  config.transformIgnorePatterns = [
-    "/node_modules/(?!(node-pg-migrate)/)",
-  ];
+  config.transformIgnorePatterns = ["/node_modules/(?!(node-pg-migrate)/)"];
 
   return config;
 };
