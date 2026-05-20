@@ -39,12 +39,17 @@
     "pg": "8.20.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "swr": "^2.4.1"
+    "swr": "^2.4.1",
+    "uuid": "11.1.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.29.0",
+    "@babel/preset-env": "^7.29.5",
+    "@babel/preset-react": "^7.28.5",
     "@commitlint/cli": "20.4.3",
     "@commitlint/config-conventional": "20.4.3",
     "autoprefixer": "10.4.27",
+    "babel-jest": "^30.4.1",
     "commitizen": "4.3.1",
     "concurrently": "9.2.1",
     "cz-conventional-changelog": "3.3.0",
