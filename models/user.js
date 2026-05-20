@@ -1,4 +1,4 @@
-import { ValidationError } from "infra/errors.js";
+import { ValidationError, NotFoundError } from "infra/errors.js";
 import database from "infra/database.js";
 
 async function findOneByUsername(username) {
@@ -20,12 +20,12 @@ async function findOneByUsername(username) {
       values: [username],
     });
 
-    // if (results.rowCount === 0) {
-    //   throw new ValidationError({
-    //     message: `${label} already in use`,
-    //     action: `Please use a different ${fieldName}`,
-    //   });
-    // }
+    if (results.rowCount === 0) {
+      throw new NotFoundError({
+        message: "User not found",
+        action: "Please check the username and try again",
+      });
+    }
 
     return results.rows[0];
   }
