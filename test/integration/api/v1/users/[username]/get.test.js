@@ -32,13 +32,20 @@ describe("GET /api/v1/users", () => {
 
       expect(response2.status).toBe(200);
 
-      const errorResponse = await response2.json();
-      expect(errorResponse).toEqual({
-        name: "ValidationError",
-        message: "Username already in use",
-        action: "Please use a different username",
-        status_code: 400,
+      const newUser = await response2.json();
+
+      expect(newUser).toEqual({
+        id: newUser.id,
+        username: "CaseMatchUser",
+        email: "casematchuser@email.com",
+        password: "password123",
+        created_at: newUser.created_at,
+        updated_at: newUser.updated_at,
       });
+
+      expect(uuidVersion(newUser.id)).toBe(4);
+      expect(Date.parse(newUser.created_at)).not.toBeNaN();
+      expect(Date.parse(newUser.updated_at)).not.toBeNaN();
     });
   });
 });
