@@ -19,9 +19,10 @@ export const up = (pgm) => {
       unique: true,
     },
     password: {
-      // 72 is the maximum length of a bcrypt hash
+      // 60 is the maximum length of a bcrypt hash
+      // https://www.npmjs.com/package/bcrypt#hash-info
       // https://security.stackexchange.com/a/39851
-      type: "varchar(72)",
+      type: "varchar(60)",
       notNull: true,
     },
     // Timestamps
@@ -30,12 +31,12 @@ export const up = (pgm) => {
     created_at: {
       type: "timestamptz",
       notNull: true,
-      default: pgm.func("current_timestamp"),
+      default: pgm.func("timezone('utc', now())"),
     },
     updated_at: {
       type: "timestamptz",
       notNull: true,
-      default: pgm.func("current_timestamp"),
+      default: pgm.func("timezone('utc', now())"),
     },
   });
 };

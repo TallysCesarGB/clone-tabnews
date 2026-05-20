@@ -28,7 +28,9 @@ describe("GET /api/v1/users", () => {
       });
       expect(response1.status).toBe(201);
 
-      const response2 = await fetch("http://localhost:3000/api/v1/users/CaseMatchUser");
+      const response2 = await fetch(
+        "http://localhost:3000/api/v1/users/CaseMatchUser",
+      );
 
       expect(response2.status).toBe(200);
 
@@ -55,14 +57,16 @@ describe("GET /api/v1/users", () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-        username: "DifferentCase",
-        email: "differentcase@email.com",
+          username: "DifferentCase",
+          email: "differentcase@email.com",
           password: "password123",
         }),
       });
       expect(response1.status).toBe(201);
 
-      const response2 = await fetch("http://localhost:3000/api/v1/users/differentcase");
+      const response2 = await fetch(
+        "http://localhost:3000/api/v1/users/differentcase",
+      );
 
       expect(response2.status).toBe(200);
 
@@ -83,7 +87,9 @@ describe("GET /api/v1/users", () => {
     });
 
     test("With nonexistent usernema", async () => {
-      const response = await fetch("http://localhost:3000/api/v1/users/nonexistentuser");
+      const response = await fetch(
+        "http://localhost:3000/api/v1/users/nonexistentuser",
+      );
 
       expect(response.status).toBe(404);
 
