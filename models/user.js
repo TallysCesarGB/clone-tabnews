@@ -1,4 +1,5 @@
 import { ValidationError, NotFoundError } from "infra/errors.js";
+import password from "models/password.js";
 import database from "infra/database.js";
 
 async function findOneByUsername(username) {
@@ -34,6 +35,7 @@ async function findOneByUsername(username) {
 async function create(userInputValues) {
   await validateUniqueField("email", userInputValues.email);
   await validateUniqueField("username", userInputValues.username);
+  await hashPasswordInObject(userInputValues);
 
   const newUser = await runInputValues(userInputValues);
   return newUser;
@@ -57,6 +59,11 @@ async function create(userInputValues) {
         action: `Please use a different ${fieldName}`,
       });
     }
+  }
+
+  async function hashPasswordInObject(userInputValues) {
+    const passwordHash = await password.hash(userInputValues.password);
+    userInputValues.password = passwordHash;
   }
 
   async function runInputValues(userInputValues) {

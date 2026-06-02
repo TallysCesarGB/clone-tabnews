@@ -40,7 +40,7 @@ describe("GET /api/v1/users", () => {
         id: newUser.id,
         username: "CaseMatchUser",
         email: "casematchuser@email.com",
-        password: "password123",
+        password: newUser.password,
         created_at: newUser.created_at,
         updated_at: newUser.updated_at,
       });
@@ -76,7 +76,7 @@ describe("GET /api/v1/users", () => {
         id: newUser.id,
         username: "DifferentCase",
         email: "differentcase@email.com",
-        password: "password123",
+        password: newUser.password,
         created_at: newUser.created_at,
         updated_at: newUser.updated_at,
       });
