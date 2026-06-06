@@ -32,31 +32,13 @@ describe("PATCH /api/v1/users", () => {
     });
 
     test("With duplicate username", async () => {
-      const user1 = await fetch("http://localhost:3000/api/v1/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: "user1",
-          email: "user1@email.com",
-          password: "password123",
-        }),
+      await orchestrator.createUser({
+        username: "user1",
       });
-      expect(user1.status).toBe(201);
 
-      const user2 = await fetch("http://localhost:3000/api/v1/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: "user2",
-          email: "user2@email.com",
-          password: "password123",
-        }),
+      await orchestrator.createUser({
+        username: "user2",
       });
-      expect(user2.status).toBe(201);
 
       const response = await fetch("http://localhost:3000/api/v1/users/user2", {
         method: "PATCH",
@@ -79,34 +61,16 @@ describe("PATCH /api/v1/users", () => {
     });
 
     test("With duplicate email", async () => {
-      const email1 = await fetch("http://localhost:3000/api/v1/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: "email1",
-          email: "email1@email.com",
-          password: "password123",
-        }),
+      await orchestrator.createUser({
+        email: "email1@email.com",
       });
-      expect(email1.status).toBe(201);
 
-      const email2 = await fetch("http://localhost:3000/api/v1/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: "email2",
-          email: "email2@email.com",
-          password: "password123",
-        }),
+      const userTemp = await orchestrator.createUser({
+        email: "email2@email.com",
       });
-      expect(email2.status).toBe(201);
 
       const response = await fetch(
-        "http://localhost:3000/api/v1/users/email2",
+        `http://localhost:3000/api/v1/users/${userTemp.username}`,
         {
           method: "PATCH",
           headers: {
@@ -129,18 +93,9 @@ describe("PATCH /api/v1/users", () => {
     });
 
     test("With unique username", async () => {
-      const uniqueuser = await fetch("http://localhost:3000/api/v1/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: "uniqueuser",
-          email: "uniqueuser@email.com",
-          password: "password123",
-        }),
+      const userTemp = await orchestrator.createUser({
+        username: "uniqueuser",
       });
-      expect(uniqueuser.status).toBe(201);
 
       const response = await fetch(
         "http://localhost:3000/api/v1/users/uniqueuser",
@@ -158,9 +113,9 @@ describe("PATCH /api/v1/users", () => {
 
       const responseBody = await response.json();
       expect(responseBody).toEqual({
-        id: responseBody.id,
+        id: userTemp.id,
         username: "uniqueuser2",
-        email: "uniqueuser@email.com",
+        email: userTemp.email,
         password: responseBody.password,
         created_at: responseBody.created_at,
         updated_at: responseBody.updated_at,
@@ -173,21 +128,12 @@ describe("PATCH /api/v1/users", () => {
     });
 
     test("With unique email", async () => {
-      const uniqueEmail = await fetch("http://localhost:3000/api/v1/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: "uniqueemailuser",
-          email: "uniqueemailuser@email.com",
-          password: "password123",
-        }),
+      const userTemp = await orchestrator.createUser({
+        email: "uniqueemailuser@email.com",
       });
-      expect(uniqueEmail.status).toBe(201);
 
       const response = await fetch(
-        "http://localhost:3000/api/v1/users/uniqueemailuser",
+        `http://localhost:3000/api/v1/users/${userTemp.username}`,
         {
           method: "PATCH",
           headers: {
@@ -203,7 +149,7 @@ describe("PATCH /api/v1/users", () => {
       const responseBody = await response.json();
       expect(responseBody).toEqual({
         id: responseBody.id,
-        username: "uniqueemailuser",
+        username: userTemp.username,
         email: "uniqueemailuser2@email.com",
         password: responseBody.password,
         created_at: responseBody.created_at,
@@ -217,21 +163,12 @@ describe("PATCH /api/v1/users", () => {
     });
 
     test("With new password", async () => {
-      const responseFirst = await fetch("http://localhost:3000/api/v1/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: "password",
-          email: "password@email.com",
-          password: "password123",
-        }),
+      const userTemp = await orchestrator.createUser({
+        password: "password123",
       });
-      expect(responseFirst.status).toBe(201);
 
       const response = await fetch(
-        "http://localhost:3000/api/v1/users/password",
+        `http://localhost:3000/api/v1/users/${userTemp.username}`,
         {
           method: "PATCH",
           headers: {
@@ -247,8 +184,8 @@ describe("PATCH /api/v1/users", () => {
       const responseBody = await response.json();
       expect(responseBody).toEqual({
         id: responseBody.id,
-        username: "password",
-        email: "password@email.com",
+        username: userTemp.username,
+        email: userTemp.email,
         password: responseBody.password,
         created_at: responseBody.created_at,
         updated_at: responseBody.updated_at,
@@ -259,7 +196,7 @@ describe("PATCH /api/v1/users", () => {
 
       expect(responseBody.updated_at > responseBody.created_at).toBe(true);
 
-      const userInDatabase = await user.findOneByUsername("password");
+      const userInDatabase = await user.findOneByUsername(userTemp.username);
 
       const correctPasswordMatch = await password.compare(
         "newpassword123",
