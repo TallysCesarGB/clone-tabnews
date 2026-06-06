@@ -44,12 +44,12 @@ describe("POST /api/v1/users", () => {
       expect(Date.parse(newUser.updated_at)).not.toBeNaN();
 
       const userInDatabase = await user.findOneByUsername("Tata");
-      
+
       const correctPasswordMatch = await password.compare(
         "password123",
         userInDatabase.password,
       );
-      
+
       const incorrectPasswordMatch = await password.compare(
         "badPassword",
         userInDatabase.password,
