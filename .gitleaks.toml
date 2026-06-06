@@ -1,0 +1,3 @@
+[[allowlist]]
+description = "Password pepper (not an API key)"
+regex = '''PASSWORD_PEPPER=f70dcb1d55ef86052994d89050c6f6569f9cb6ad4ad27c9dfcb2337085c32517'''

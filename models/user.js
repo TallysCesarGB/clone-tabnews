@@ -1,5 +1,80 @@
 import { ValidationError, NotFoundError } from "infra/errors.js";
+import password from "models/password.js";
 import database from "infra/database.js";
+
+async function create(userInputValues) {
+  await validateUniqueField("username", userInputValues.username);
+  await validateUniqueField("email", userInputValues.email);
+  await hashPasswordInObject(userInputValues);
+
+  const newUser = await runInputValues(userInputValues);
+  return newUser;
+
+  async function runInputValues(userInputValues) {
+    const results = await database.query({
+      text: `
+    INSERT INTO 
+      users (username, email, password) 
+    VALUES 
+      ($1, $2, $3)
+    RETURNING
+      *
+    ;`,
+      values: [
+        userInputValues.username,
+        userInputValues.email,
+        userInputValues.password,
+      ],
+    });
+    return results.rows[0];
+  }
+}
+
+async function updateByUsername(username, userInputValues) {
+  const currentUser = await findOneByUsername(username);
+
+  if (userInputValues.username) {
+    await validateUniqueField("username", userInputValues.username);
+  }
+
+  if (userInputValues.email) {
+    await validateUniqueField("email", userInputValues.email);
+  }
+
+  if (userInputValues.password) {
+    await hashPasswordInObject(userInputValues);
+  }
+
+  const userWithUpdatedValues = { ...currentUser, ...userInputValues };
+
+  const updatedUser = await runUpdate(userWithUpdatedValues);
+  return updatedUser;
+
+  async function runUpdate(userWithUpdatedValues) {
+    const results = await database.query({
+      text: `
+      UPDATE 
+        users
+      SET 
+        username = $2,
+        email = $3,
+        password = $4,
+        updated_at = timezone('utc', now())
+      WHERE
+        id = $1
+      RETURNING
+        *
+      ;`,
+      values: [
+        userWithUpdatedValues.id,
+        userWithUpdatedValues.username,
+        userWithUpdatedValues.email,
+        userWithUpdatedValues.password,
+      ],
+    });
+    return results.rows[0];
+  }
+}
 
 async function findOneByUsername(username) {
   const userFound = await runSelectQuery(username);
@@ -31,57 +106,36 @@ async function findOneByUsername(username) {
   }
 }
 
-async function create(userInputValues) {
-  await validateUniqueField("email", userInputValues.email);
-  await validateUniqueField("username", userInputValues.username);
-
-  const newUser = await runInputValues(userInputValues);
-  return newUser;
-
-  async function validateUniqueField(fieldName, fieldValue) {
-    const results = await database.query({
-      text: `
-      SELECT 
-        ${fieldName}
-      FROM 
-        users
-      WHERE 
-        LOWER(${fieldName}) = LOWER($1)
-      ;`,
-      values: [fieldValue],
-    });
-    if (results.rowCount > 0) {
-      const label = fieldName.charAt(0).toUpperCase() + fieldName.slice(1);
-      throw new ValidationError({
-        message: `${label} already in use`,
-        action: `Please use a different ${fieldName}`,
-      });
-    }
-  }
-
-  async function runInputValues(userInputValues) {
-    const results = await database.query({
-      text: `
-    INSERT INTO 
-      users (username, email, password) 
-    VALUES 
-      ($1, $2, $3)
-    RETURNING
-      *
+async function validateUniqueField(fieldName, fieldValue) {
+  const results = await database.query({
+    text: `
+    SELECT 
+      ${fieldName}
+    FROM 
+      users
+    WHERE 
+      LOWER(${fieldName}) = LOWER($1)
     ;`,
-      values: [
-        userInputValues.username,
-        userInputValues.email,
-        userInputValues.password,
-      ],
+    values: [fieldValue],
+  });
+  if (results.rowCount > 0) {
+    const label = fieldName.charAt(0).toUpperCase() + fieldName.slice(1);
+    throw new ValidationError({
+      message: `${label} already in use`,
+      action: `Please use a different ${fieldName}`,
     });
-    return results.rows[0];
   }
+}
+
+async function hashPasswordInObject(userInputValues) {
+  const passwordHash = await password.hash(userInputValues.password);
+  userInputValues.password = passwordHash;
 }
 
 const user = {
   create,
   findOneByUsername,
+  updateByUsername,
 };
 
 export default user;
