@@ -30,7 +30,7 @@ describe("POST /api/v1/sessions", () => {
 
       const responseBody = await response.json();
       expect(responseBody).toEqual({
-        name: "UnautorizedError",
+        name: "UnauthorizedError",
         message: "Invalid email or password",
         action: "Please check your credentials and try again",
         status_code: 401,
@@ -56,7 +56,7 @@ describe("POST /api/v1/sessions", () => {
 
       const responseBody = await response.json();
       expect(responseBody).toEqual({
-        name: "UnautorizedError",
+        name: "UnauthorizedError",
         message: "Invalid email or password",
         action: "Please check your credentials and try again",
         status_code: 401,
@@ -80,7 +80,7 @@ describe("POST /api/v1/sessions", () => {
 
       const responseBody = await response.json();
       expect(responseBody).toEqual({
-        name: "UnautorizedError",
+        name: "UnauthorizedError",
         message: "Invalid email or password",
         action: "Please check your credentials and try again",
         status_code: 401,
