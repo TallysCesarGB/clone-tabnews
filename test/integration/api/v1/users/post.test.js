@@ -35,6 +35,7 @@ describe("POST /api/v1/users", () => {
         id: newUser.id,
         username: "Tata",
         email: "tata@email.com",
+        features: [],
         password: newUser.password,
         created_at: newUser.created_at,
         updated_at: newUser.updated_at,
