@@ -39,7 +39,14 @@ describe("Use Case: Registration Flow (all sucessful)", () => {
     });
   });
 
-  test("Receive email with verification link", async () => {});
+  test("Receive email with verification link", async () => {
+    const lastEmail = await orchestrator.getLastEmail();
+
+    expect(lastEmail.sender).toBe("<contato@email.com>");
+    expect(lastEmail.recipients[0]).toBe("<registration.flow@email.com>");
+    expect(lastEmail.subject).toBe("Activate your account");
+    expect(lastEmail.text).toContain("RegistrationFlowTestUser"); 
+  });
 
   test("Activate account by clicking on verification link", async () => {});
 
